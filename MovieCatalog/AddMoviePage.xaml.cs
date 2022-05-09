@@ -59,6 +59,11 @@ namespace MovieCatalog
                 {
                     MessageBox.Show("Failed to open connection: " + except.Message);
                 }
+
+                if(this.NavigationService.CanGoBack)
+                {
+                    this.NavigationService.GoBack();
+                }
             }
             
         }

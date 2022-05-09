@@ -1,37 +1,5 @@
-﻿<Window x:Class="MovieCatalog.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MovieCatalog"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
-
-        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="20">
-            Movies:
-        </TextBlock>
-        <ListBox x:Name="watchedMovies" Grid.Column="1" Grid.Row="2">
-        </ListBox>
-        <Button x:Name="addMovieButton" Content="Add Movie" Grid.Column="4" Grid.Row="6" Click="addMovieButton_Click" Grid.ColumnSpan="2"/>
-
-    </Grid>
-</Window>
+﻿<NavigationWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="MovieCatalog.MainWindow" 
+    Source="MovieListPage.xaml"/>
