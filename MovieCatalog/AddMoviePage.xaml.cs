@@ -45,7 +45,7 @@ namespace MovieCatalog
                 {
                     dbConnection.Open();
                     int rating = int.Parse(ratingInput.Text);
-                    SqlCommand command = new SqlCommand($"INSERT INTO movie(title, rating) VALUES ('{titleInput.Text}', {rating});", dbConnection);
+                    SqlCommand command = new SqlCommand($"INSERT INTO movie(title, rating, dateAdded) VALUES ('{titleInput.Text}', {rating}, '{DateTime.Today.ToString()}');", dbConnection);
                     SqlDataReader dataReader = command.ExecuteReader();
                     while (dataReader.Read())
                     {

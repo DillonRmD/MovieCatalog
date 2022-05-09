@@ -5,14 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MovieCatalog"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="300"
       Title="AddMoviePage">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="20" />
@@ -24,27 +22,31 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="20">
-            Movie Name:
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="20" HorizontalAlignment="Center">
+            Movie Title:
         </TextBlock>
-        <TextBox x:Name="titleInput" Grid.Column="2" Grid.Row="1"></TextBox>
+        <TextBox x:Name="titleInput" Grid.Column="1" Grid.Row="2"></TextBox>
         
         
-        <TextBlock Grid.Column="1" Grid.Row="2" FontSize="12">
+        <TextBlock Grid.Column="1" Grid.Row="3" FontSize="12" HorizontalAlignment="Center">
             Rating:
         </TextBlock>
-        <TextBox x:Name="ratingInput" Grid.Column="2" Grid.Row="2" Width="20"></TextBox>
+        <TextBox x:Name="ratingInput" Grid.Column="1" Grid.Row="4" Width="20"></TextBox>
 
-        <TextBlock Grid.Column="1" Grid.Row="4" FontSize="12">
+        <TextBlock Grid.Column="1" Grid.Row="5" FontSize="12" HorizontalAlignment="Center">
             Director Full Name:
         </TextBlock>
-        <TextBox x:Name="directorNameInput" Grid.Column="2" Grid.Row="4" Width="150"></TextBox>
+        <TextBox x:Name="directorNameInput" Grid.Column="1" Grid.Row="6" Width="150"></TextBox>
 
-        <Button x:Name="addMovieButton" Content="Add Movie" Grid.Column="2" Grid.Row="6" Click="addMovieButton_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="addMovieButton" Content="Add Movie" Grid.Column="1" Grid.Row="7" Click="addMovieButton_Click"/>
 
     </Grid>
 </Page>

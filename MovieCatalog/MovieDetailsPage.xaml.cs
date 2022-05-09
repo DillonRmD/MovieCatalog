@@ -16,29 +16,42 @@ using System.Data.SqlClient;
 
 namespace MovieCatalog
 {
-    public partial class MovieListPage : Page
+    public partial class MovieDetailsPage : Page
     {
         private SqlConnection dbConnection;
 
-        public MovieListPage()
+        public MovieDetailsPage(string selectedMovie)
         {
             InitializeComponent();
 
+            char[] seperator = { '>' };
+            string[] seperatedMovieDetails = selectedMovie.Split(seperator);
+
+            string movieTitle = seperatedMovieDetails[0];
+
             string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI;";
             dbConnection = new SqlConnection(connectionStr);
-
             try
             {
                 dbConnection.Open();
 
-                SqlCommand command = new SqlCommand("SELECT * FROM movie", dbConnection);
+                SqlCommand command = new SqlCommand($"SELECT * FROM movie where movie.title = '{movieTitle}'", dbConnection);
                 SqlDataReader dataReader = command.ExecuteReader();
 
                 while (dataReader.Read())
                 {
-                    ListBoxItem item = new ListBoxItem();
-                    item.Content = dataReader.GetValue(0) + " > rating: " + dataReader.GetValue(1);
-                    watchedMovies.Items.Add(item);
+                    MovieTitleLabel.Text = dataReader.GetValue(0).ToString();
+                    MovieRatingLabel.Text = "Rating: " + dataReader.GetValue(1).ToString();
+                    DateTime movieDate = (DateTime)dataReader.GetValue(2);
+                    MovieDateLabel.Text = "Date Added: " + movieDate.ToString("yyyy-MM-dd");
+                    if(dataReader.GetValue(3).ToString() != "")
+                    {
+                        MovieDirectorLabel.Text = "Director: " + dataReader.GetValue(3).ToString();
+                    }
+                    else
+                    {
+                        MovieDirectorLabel.Text = "Click to add a director";
+                    }
                 }
 
                 dataReader.Close();
@@ -49,18 +62,6 @@ namespace MovieCatalog
             {
                 MessageBox.Show("Failed to contact database: " + except.Message);
             }
-        }
-
-        private void addMovieButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.NavigationService.Navigate(new AddMoviePage());
-        }
-
-        private void watchedMovies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBoxItem item = (sender as ListBox).SelectedItem as ListBoxItem;
-
-            this.NavigationService.Navigate(new MovieDetailsPage(item.Content.ToString()));
         }
     }
 }
