@@ -17,3 +17,4 @@ The user can add watched movies to the data base via the "add movie" button. Inf
 - [] Fix bug in movie details page back button (NavigationService Issue)
 - [] Add image for ratings (rather than just text)
 - [] Make UI look better
+- [] Add error checking for failed SQL commands (unique movie names etc.)
