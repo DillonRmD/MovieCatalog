@@ -63,5 +63,13 @@ namespace MovieCatalog
                 MessageBox.Show("Failed to contact database: " + except.Message);
             }
         }
+
+        private void doneButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+        }
     }
 }

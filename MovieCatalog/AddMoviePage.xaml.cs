@@ -45,19 +45,59 @@ namespace MovieCatalog
                 {
                     dbConnection.Open();
                     int rating = int.Parse(ratingInput.Text);
-                    SqlCommand command = new SqlCommand($"INSERT INTO movie(title, rating, dateAdded) VALUES ('{titleInput.Text}', {rating}, '{DateTime.Today.ToString()}');", dbConnection);
-                    SqlDataReader dataReader = command.ExecuteReader();
-                    while (dataReader.Read())
+                    
+                    SqlCommand createMovieEntryCommand;
+
+                    if(directorNameInput.Text != "")
                     {
-                        MessageBox.Show(dataReader.GetValue(0) + " - " + dataReader.GetValue(1) + " - " + dataReader.GetValue(2));
+                        SqlCommand retrieveDirectorIDCommand = new SqlCommand($"SELECT * FROM director WHERE director.name = '{directorNameInput.Text}'", dbConnection);
+                        SqlDataReader retrieveDirectorIDDataReader = retrieveDirectorIDCommand.ExecuteReader();
+                        int directorID = -1;
+                        bool createDirectorEntry = true;
+                        while (retrieveDirectorIDDataReader.Read())
+                        {
+                            createDirectorEntry = false;
+                            directorID = int.Parse(retrieveDirectorIDDataReader.GetValue(1).ToString());
+                        }
+                        retrieveDirectorIDDataReader.Close();
+                        retrieveDirectorIDCommand.Dispose();
+
+                        if (createDirectorEntry)
+                        {
+                            // Create entry for director
+                            SqlCommand createDirectorCommand = new SqlCommand($"INSERT INTO director(name) VALUES('{directorNameInput.Text}');", dbConnection);
+                            SqlDataReader createDirectorExecution = createDirectorCommand.ExecuteReader();
+                            createDirectorExecution.Close();
+                            createDirectorCommand.Dispose();
+
+                            // Get that entries ID
+                            retrieveDirectorIDCommand = new SqlCommand($"SELECT * FROM director WHERE director.name = '{directorNameInput.Text}'", dbConnection);
+                            retrieveDirectorIDDataReader = retrieveDirectorIDCommand.ExecuteReader();
+                            while (retrieveDirectorIDDataReader.Read())
+                            {
+                                directorID = int.Parse(retrieveDirectorIDDataReader.GetValue(1).ToString());
+                            }
+                            retrieveDirectorIDDataReader.Close();
+                            retrieveDirectorIDCommand.Dispose();
+                        }
+
+                        // Pass that ID to the movie creation entry
+                        createMovieEntryCommand = new SqlCommand($"INSERT INTO movie(title, rating, dateAdded, directorID) VALUES ('{titleInput.Text}', {rating}, '{DateTime.Today.ToString()}', {directorID});", dbConnection);
                     }
-                    dataReader.Close();
-                    command.Dispose();
+                    else
+                    {
+                        // no director inputted
+                        createMovieEntryCommand = new SqlCommand($"INSERT INTO movie(title, rating, dateAdded) VALUES ('{titleInput.Text}', {rating}, '{DateTime.Today.ToString()}');", dbConnection);
+                    }
+
+
+                    createMovieEntryCommand.ExecuteReader();
+                    createMovieEntryCommand.Dispose();
                     dbConnection.Close();
                 }
                 catch (Exception except)
                 {
-                    MessageBox.Show("Failed to open connection: " + except.Message);
+                    MessageBox.Show(except.Message);
                 }
 
                 if(this.NavigationService.CanGoBack)

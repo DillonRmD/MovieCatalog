@@ -39,6 +39,7 @@
         <TextBlock x:Name="MovieDirectorLabel" Grid.Column="2" Grid.Row="4" FontSize="18" HorizontalAlignment="Center">
             Title:
         </TextBlock>
-
+        
+        <Button x:Name="doneButton" Content="Done" Grid.Column="2" Grid.Row="7" Click="doneButton_Click"/>
     </Grid>
 </Page>
