@@ -23,7 +23,7 @@ namespace MovieCatalog
         {
             InitializeComponent();
 
-            string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI;";
+            string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI; MultipleActiveResultSets=True;";
             dbConnection = new SqlConnection(connectionStr);
 
             try
@@ -52,7 +52,7 @@ namespace MovieCatalog
 
         private void addMovieButton_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new AddMoviePage());
+            Navigator.Navigate(new AddMoviePage());
         }
 
         private void watchedMovies_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -60,13 +60,7 @@ namespace MovieCatalog
             ListBoxItem item = (sender as ListBox).SelectedItem as ListBoxItem;
             
             MovieDetailsPage page = new MovieDetailsPage(item.Content.ToString());
-            //Navigator.Navigate("MovieDetailsPage.xaml", item.Content.ToString());
             Navigator.Navigate(page);
-
-            //this.NavigationService.Navigate(page);
-
-            //NavigationService.LoadCompleted += page.NavigationService_LoadCompleted;
-            //this.NavigationService.Navigate(new MovieDetailsPage(), item.Content.ToString());
         }
     }
 }

@@ -26,36 +26,9 @@ namespace MovieCatalog
             InitializeComponent();
         }
 
-        // returns the director id based on the name, if the director is not found returns a -1
-        private int getDirectorIDFromDB(string name)
-        {
-            SqlCommand retrieveDirectorIDCommand = new SqlCommand($"SELECT * FROM director WHERE director.name = '{name}'", dbConnection);
-            SqlDataReader retrieveDirectorIDDataReader = retrieveDirectorIDCommand.ExecuteReader();
-
-            int directorID = -1;
-            while (retrieveDirectorIDDataReader.Read())
-            {
-                directorID = int.Parse(retrieveDirectorIDDataReader.GetValue(1).ToString());
-            }
-
-            retrieveDirectorIDDataReader.Close();
-            retrieveDirectorIDCommand.Dispose();
-
-            return directorID;
-        }
-
-        // Adds a director to the DB based on the name
-        private void addDirectorToDB(string name)
-        {
-            SqlCommand createDirectorCommand = new SqlCommand($"INSERT INTO director(name) VALUES('{name}');", dbConnection);
-            SqlDataReader createDirectorExecution = createDirectorCommand.ExecuteReader();
-            createDirectorExecution.Close();
-            createDirectorCommand.Dispose();
-        }
-
         private void addMovieButton_Click(object sender, RoutedEventArgs e)
         {
-            string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI;";
+            string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI; MultipleActiveResultSets=True;";
             dbConnection = new SqlConnection(connectionStr);
 
             // ratingInput is either empty or is not a number between 1 and 5
@@ -77,37 +50,32 @@ namespace MovieCatalog
 
                     // Get the rating value from the text field
                     int rating = int.Parse(ratingInput.Text);
-                    
-                    SqlCommand createMovieEntryCommand;
 
                     // if the input field is not empty then we want to add a director to this movie
                     if(directorNameInput.Text != "")
                     {
-                        int directorID = getDirectorIDFromDB(directorNameInput.Text);
+                        int directorID = DBUTils.GetDirectorID(directorNameInput.Text, dbConnection);
 
                         // If we don't find a directorID for that name, create one
                         if (directorID == -1)
                         {
                             // Make call to DB and create it
-                            addDirectorToDB(directorNameInput.Text);
+                            DBUTils.AddDirector(directorNameInput.Text, dbConnection);
 
                             // Get that new entries' ID
-                            directorID = getDirectorIDFromDB(directorNameInput.Text);
+                            directorID = DBUTils.GetDirectorID(directorNameInput.Text, dbConnection);
                         }
 
                         // Pass that ID to the movie creation entry
-                        createMovieEntryCommand = new SqlCommand($"INSERT INTO movie(title, rating, dateAdded, directorID) VALUES ('{titleInput.Text}', {rating}, '{DateTime.Today.ToString()}', {directorID});", dbConnection);
+                        DBUTils.AddMovie(titleInput.Text, rating, directorID, dbConnection);
                     }
                     // otherwise we don't want a director added to this movie
                     else
                     {
                         // no director inputted
-                        createMovieEntryCommand = new SqlCommand($"INSERT INTO movie(title, rating, dateAdded) VALUES ('{titleInput.Text}', {rating}, '{DateTime.Today.ToString()}');", dbConnection);
+                        DBUTils.AddMovie(titleInput.Text, rating, dbConnection);
                     }
 
-                    // cleanup
-                    createMovieEntryCommand.ExecuteReader();
-                    createMovieEntryCommand.Dispose();
                     dbConnection.Close();
                 }
                 catch (Exception except)
@@ -118,7 +86,7 @@ namespace MovieCatalog
                 // After adding the movie go back to the previous page
                 if(this.NavigationService.CanGoBack)
                 {
-                    this.NavigationService.GoBack();
+                    Navigator.GoBack();
                 }
             }
             

@@ -21,11 +21,6 @@ namespace MovieCatalog
         private SqlConnection dbConnection;
         public string selectedMovie;
 
-        public void NavigationService_LoadCompleted(object sender, NavigationEventArgs e)
-        {
-
-        }
-
         public MovieDetailsPage()
         {
             InitializeComponent();
@@ -41,33 +36,19 @@ namespace MovieCatalog
             string[] seperatedMovieDetails = selectedMovie.Split(seperator);
             string movieTitle = seperatedMovieDetails[0];
 
-            string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI;";
+            string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI; MultipleActiveResultSets=True;";
             dbConnection = new SqlConnection(connectionStr);
             try
             {
                 dbConnection.Open();
 
-                SqlCommand command = new SqlCommand($"SELECT * FROM movie where movie.title = '{movieTitle}'", dbConnection);
-                SqlDataReader dataReader = command.ExecuteReader();
+                (string returnedMovieTitle, int rating, string dateAdded, string directorName) = DBUTils.GetMovie(movieTitle, dbConnection);
 
-                while (dataReader.Read())
-                {
-                    MovieTitleLabel.Text = dataReader.GetValue(0).ToString();
-                    MovieRatingLabel.Text = "Rating: " + dataReader.GetValue(1).ToString();
-                    DateTime movieDate = (DateTime)dataReader.GetValue(2);
-                    MovieDateLabel.Text = "Date Added: " + movieDate.ToString("yyyy-MM-dd");
-                    if (dataReader.GetValue(3).ToString() != "")
-                    {
-                        MovieDirectorLabel.Text = "Director: " + dataReader.GetValue(3).ToString();
-                    }
-                    else
-                    {
-                        MovieDirectorLabel.Text = "Click to add a director";
-                    }
-                }
+                MovieTitleLabel.Text = returnedMovieTitle;
+                MovieRatingLabel.Text = "Rating: " + rating.ToString();
+                MovieDateLabel.Text = "Date Added: " + dateAdded;
+                MovieDirectorLabel.Text = (directorName == "") ? "Click to add a director" : "Director: " + directorName;
 
-                dataReader.Close();
-                command.Dispose();
                 dbConnection.Close();
             }
             catch (Exception except)
