@@ -23,8 +23,20 @@ namespace MovieCatalog
 
         public void NavigationService_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            selectedMovie = (string)e.ExtraData;
 
+        }
+
+        public MovieDetailsPage()
+        {
+            InitializeComponent();
+        }
+
+        public MovieDetailsPage(string title):this()
+        {
+            InitializeComponent();
+
+            selectedMovie = title;
+            
             char[] seperator = { '>' };
             string[] seperatedMovieDetails = selectedMovie.Split(seperator);
             string movieTitle = seperatedMovieDetails[0];
@@ -64,17 +76,9 @@ namespace MovieCatalog
             }
         }
 
-        public MovieDetailsPage()
-        {
-            InitializeComponent();
-        }
-
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.NavigationService.CanGoBack)
-            {
-                NavigationService.GoBack();
-            }
+            Navigator.Navigate("MovieListPage.xaml");
         }
     }
 }

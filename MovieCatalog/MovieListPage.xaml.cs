@@ -58,10 +58,15 @@ namespace MovieCatalog
         private void watchedMovies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBoxItem item = (sender as ListBox).SelectedItem as ListBoxItem;
-            MovieDetailsPage page = new MovieDetailsPage();
-            NavigationService.LoadCompleted += page.NavigationService_LoadCompleted;
+            
+            MovieDetailsPage page = new MovieDetailsPage(item.Content.ToString());
+            //Navigator.Navigate("MovieDetailsPage.xaml", item.Content.ToString());
+            Navigator.Navigate(page);
 
-            this.NavigationService.Navigate(new MovieDetailsPage(), item.Content.ToString());
+            //this.NavigationService.Navigate(page);
+
+            //NavigationService.LoadCompleted += page.NavigationService_LoadCompleted;
+            //this.NavigationService.Navigate(new MovieDetailsPage(), item.Content.ToString());
         }
     }
 }
