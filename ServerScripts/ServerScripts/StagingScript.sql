@@ -3,4 +3,3 @@ use MovieCatalog;
 --INSERT INTO movie(title, rating, dateAdded) VALUES ('TestMovie', 5, '1999-07-07');
 select * from movie;
 select * from director;
-select * from director where director.directorID = 5;

@@ -19,7 +19,6 @@ namespace MovieCatalog
     public partial class MovieListPage : Page
     {
         private SqlConnection dbConnection;
-
         public MovieListPage()
         {
             InitializeComponent();
@@ -59,8 +58,10 @@ namespace MovieCatalog
         private void watchedMovies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListBoxItem item = (sender as ListBox).SelectedItem as ListBoxItem;
+            MovieDetailsPage page = new MovieDetailsPage();
+            NavigationService.LoadCompleted += page.NavigationService_LoadCompleted;
 
-            this.NavigationService.Navigate(new MovieDetailsPage(item.Content.ToString()));
+            this.NavigationService.Navigate(new MovieDetailsPage(), item.Content.ToString());
         }
     }
 }

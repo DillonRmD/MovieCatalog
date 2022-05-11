@@ -19,14 +19,14 @@ namespace MovieCatalog
     public partial class MovieDetailsPage : Page
     {
         private SqlConnection dbConnection;
+        public string selectedMovie;
 
-        public MovieDetailsPage(string selectedMovie)
+        public void NavigationService_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            InitializeComponent();
+            selectedMovie = (string)e.ExtraData;
 
             char[] seperator = { '>' };
             string[] seperatedMovieDetails = selectedMovie.Split(seperator);
-
             string movieTitle = seperatedMovieDetails[0];
 
             string connectionStr = "Server= RMDITX\\MSSQLSERVER01; Database=MovieCatalog; Integrated Security=SSPI;";
@@ -44,7 +44,7 @@ namespace MovieCatalog
                     MovieRatingLabel.Text = "Rating: " + dataReader.GetValue(1).ToString();
                     DateTime movieDate = (DateTime)dataReader.GetValue(2);
                     MovieDateLabel.Text = "Date Added: " + movieDate.ToString("yyyy-MM-dd");
-                    if(dataReader.GetValue(3).ToString() != "")
+                    if (dataReader.GetValue(3).ToString() != "")
                     {
                         MovieDirectorLabel.Text = "Director: " + dataReader.GetValue(3).ToString();
                     }
@@ -62,6 +62,11 @@ namespace MovieCatalog
             {
                 MessageBox.Show("Failed to contact database: " + except.Message);
             }
+        }
+
+        public MovieDetailsPage()
+        {
+            InitializeComponent();
         }
 
         private void doneButton_Click(object sender, RoutedEventArgs e)
