@@ -54,26 +54,23 @@ namespace MovieCatalog
                     // if the input field is not empty then we want to add a director to this movie
                     if(directorNameInput.Text != "")
                     {
-                        int directorID = DBUTils.GetDirectorID(directorNameInput.Text, dbConnection);
+                        int directorID = DBUtils.GetDirectorID(directorNameInput.Text, dbConnection);
 
                         // If we don't find a directorID for that name, create one
                         if (directorID == -1)
                         {
                             // Make call to DB and create it
-                            DBUTils.AddDirector(directorNameInput.Text, dbConnection);
-
-                            // Get that new entries' ID
-                            directorID = DBUTils.GetDirectorID(directorNameInput.Text, dbConnection);
+                            directorID = DBUtils.AddDirector(directorNameInput.Text, dbConnection);
                         }
 
                         // Pass that ID to the movie creation entry
-                        DBUTils.AddMovie(titleInput.Text, rating, directorID, dbConnection);
+                        DBUtils.AddMovie(titleInput.Text, rating, directorID, dbConnection);
                     }
                     // otherwise we don't want a director added to this movie
                     else
                     {
                         // no director inputted
-                        DBUTils.AddMovie(titleInput.Text, rating, dbConnection);
+                        DBUtils.AddMovie(titleInput.Text, rating, dbConnection);
                     }
 
                     dbConnection.Close();

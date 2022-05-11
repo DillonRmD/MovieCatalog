@@ -21,6 +21,7 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
@@ -30,6 +31,6 @@
         </TextBlock>
         <ListBox x:Name="watchedMovies" Grid.Column="2" Grid.Row="2" SelectionChanged="watchedMovies_SelectionChanged">
         </ListBox>
-        <Button x:Name="addMovieButton" Content="Add Movie" Grid.Column="2" Grid.Row="6" Click="addMovieButton_Click"/>
+        <Button x:Name="addMovieButton" Content="Add Movie" Grid.Column="2" Grid.Row="4" Click="addMovieButton_Click"/>
     </Grid>
 </Page>

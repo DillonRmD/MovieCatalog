@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace MovieCatalog
 {
-    class DBUTils
+    class DBUtils
     {
         public static void AddMovie(string title, int rating, int directorID, SqlConnection dbConnection)
         {
@@ -39,13 +39,14 @@ namespace MovieCatalog
             }
         }
 
-        public static (string, int, string, string) GetMovie(string title, SqlConnection dbConnection)
+        public static (string, int, string, string, int) GetMovie(string title, SqlConnection dbConnection)
         {
             string movieTitle = title;
             int rating = -1;
             string dateAdded = "";
             string directorName = "";
             int directorID = -1;
+            int movieID = -1;
 
             try
             {
@@ -58,6 +59,7 @@ namespace MovieCatalog
                     DateTime movieDate = (DateTime)dataReader.GetValue(2);
                     dateAdded = movieDate.ToString("yyyy-MM-dd");
                     directorID = (dataReader.GetValue(3).ToString() == "") ? -1 : int.Parse(dataReader.GetValue(3).ToString());
+                    movieID = (dataReader.GetValue(4).ToString() == "") ? -1 : int.Parse(dataReader.GetValue(4).ToString());
                 }
 
                 dataReader.Close();
@@ -65,12 +67,26 @@ namespace MovieCatalog
 
                 directorName = GetDirectorName(directorID, dbConnection);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
 
-            return (movieTitle, rating, dateAdded, directorName);
+            return (movieTitle, rating, dateAdded, directorName, movieID);
+        }
+
+        public static void UpdateMovieWithDirector(int movieID, int directorID, SqlConnection dbConnection)
+        {
+            try
+            {
+                SqlCommand updateMovieCommand = new SqlCommand($"UPDATE movie SET movie.directorID={directorID} WHERE movie.movieID={movieID}", dbConnection);
+                updateMovieCommand.ExecuteReader();
+                updateMovieCommand.Dispose();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         public static string GetDirectorName(int id, SqlConnection dbConnection)
@@ -122,19 +138,26 @@ namespace MovieCatalog
             return directorID;
         }
 
-        public static void AddDirector(string name, SqlConnection dbConnection)
+        public static int AddDirector(string name, SqlConnection dbConnection)
         {
+            int directorID = -1;
+
             try
             {
                 SqlCommand createDirectorCommand = new SqlCommand($"INSERT INTO director(name) VALUES('{name}');", dbConnection);
                 SqlDataReader createDirectorExecution = createDirectorCommand.ExecuteReader();
                 createDirectorExecution.Close();
                 createDirectorCommand.Dispose();
+
+                directorID = GetDirectorID(name, dbConnection);
+
             }
             catch(Exception e)
             {
                 MessageBox.Show(e.Message);
             }
+
+            return directorID;
             
         }
     }

@@ -21,6 +21,12 @@ namespace MovieCatalog
         private SqlConnection dbConnection;
         public string selectedMovie;
 
+        private string returnedMovieTitle;
+        private int rating;
+        private string dateAdded;
+        private string directorName;
+        private int movieID;
+
         public MovieDetailsPage()
         {
             InitializeComponent();
@@ -42,7 +48,7 @@ namespace MovieCatalog
             {
                 dbConnection.Open();
 
-                (string returnedMovieTitle, int rating, string dateAdded, string directorName) = DBUTils.GetMovie(movieTitle, dbConnection);
+                (returnedMovieTitle, rating, dateAdded, directorName, movieID) = DBUtils.GetMovie(movieTitle, dbConnection);
 
                 MovieTitleLabel.Text = returnedMovieTitle;
                 MovieRatingLabel.Text = "Rating: " + rating.ToString();
@@ -60,6 +66,12 @@ namespace MovieCatalog
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
             Navigator.Navigate("MovieListPage.xaml");
+        }
+
+        private void MovieDirectorLabel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            AddDirectorPopupWindow window = new AddDirectorPopupWindow(movieID);
+            window.ShowDialog();
         }
     }
 }
