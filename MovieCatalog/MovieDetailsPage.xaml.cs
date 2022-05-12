@@ -53,7 +53,16 @@ namespace MovieCatalog
                 MovieTitleLabel.Text = returnedMovieTitle;
                 MovieRatingLabel.Text = "Rating: " + rating.ToString();
                 MovieDateLabel.Text = "Date Added: " + dateAdded;
-                MovieDirectorLabel.Text = (directorName == "") ? "Click to add a director" : "Director: " + directorName;
+                if(directorName == "")
+                {
+                    MovieDirectorLabel.Text = "Click to add a director";
+                    MovieDirectorLabel.Foreground = new SolidColorBrush(Colors.Blue);
+                }
+                else
+                {
+                    MovieDirectorLabel.Text = "Director: " + directorName;
+                }
+                
 
                 dbConnection.Close();
             }

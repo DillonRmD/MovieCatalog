@@ -3,4 +3,5 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="MovieCatalog.MainWindow" 
     Source="MovieListPage.xaml"
+    ShowsNavigationUI="False"
     Height="600" Width="300"/>
